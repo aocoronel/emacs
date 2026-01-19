@@ -8,6 +8,12 @@
 (setq native-comp-async-report-warnings-errors 'silent)
 
 (which-key-mode 1)
+(setq which-key-separator "  ")
+(setq which-key-prefix-prefix "... ")
+(setq which-key-idle-delay 1.0)
+(setq which-key-idle-secondary-delay 0.25)
+(setq which-key-add-column-padding 1)
+(setq which-key-max-description-length 40)
 
 (delete-selection-mode 1)
 (add-to-list 'load-path "~/.emacs.d/local/")
@@ -81,6 +87,12 @@
   (load-theme 'elegantvagrant t))
 
 ;; === Custom Functions ===
+
+(defun kill-all-other-buffers ()
+  "Kill all buffers except the current one."
+  (interactive)
+  (mapc #'kill-buffer
+        (delq (current-buffer) (buffer-list))))
 
 (defun surround-with-next-char (beg end)
   "Surround the region from BEG to END with the next input character on both sides."
@@ -574,6 +586,8 @@ This command does the inverse of `fill-paragraph'."
 (global-set-key (kbd "C-c s") #'surround-with-next-char)
 
 (global-set-key (kbd "C-S-k") #'kill-whole-line)
+
+(define-key dired-mode-map (kbd "r") #'wdired-change-to-wdired-mode)
 
 (setq custom-file "~/.emacs.d/custom.el")
 (when (file-exists-p custom-file)
