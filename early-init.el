@@ -14,8 +14,12 @@
 (setq load-prefer-newer t)
 (setq native-comp-speed 3)
 (native-compile-async "/usr/local/lib/emacs/30.2.50/native-lisp" 'recursively)
-(setq native-comp-compiler-options '("-march=znver3" "-Ofast" "-g0" "-fno-finite-math-only" "-fgraphite-identity" "-floop-nest-optimize" "-fdevirtualize-at-ltrans" "-fipa-pta" "-fno-semantic-interposition" "-flto=auto" "-fuse-linker-plugin"))
-(setq native-comp-driver-options '("-march=znver3" "-Ofast" "-g0" "-fno-finite-math-only" "-fgraphite-identity" "-floop-nest-optimize" "-fdevirtualize-at-ltrans" "-fipa-pta" "-fno-semantic-interposition" "-flto=auto" "-fuse-linker-plugin"))
+(setq native-comp-compiler-options '("-march=x86-64" "-Ofast" "-g0" "-fno-finite-math-only" "-fgraphite-identity" "-floop-nest-optimize" "-fdevirtualize-at-ltrans" "-fipa-pta" "-fno-semantic-interposition" "-flto=auto" "-fuse-linker-plugin"))
+(setq native-comp-driver-options '("-march=x86-64" "-Ofast" "-g0" "-fno-finite-math-only" "-fgraphite-identity" "-floop-nest-optimize" "-fdevirtualize-at-ltrans" "-fipa-pta" "-fno-semantic-interposition" "-flto=auto" "-fuse-linker-plugin"))
+
+(setq native-comp-deferred-compilation nil
+      native-comp-speed 0
+      native-comp-async-report-warnings-errors 'silent)
 
 ;; Ignore Warnings
 
