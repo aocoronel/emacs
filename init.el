@@ -728,7 +728,7 @@ This command does the inverse of `fill-paragraph'."
 (define-key dired-mode-map (kbd "b") #'dired-up-directory)
 
 (keymap-global-unset "C-x f") ;; unmaps set-fill-column
-(keymap-global-unset "C-x d") ;; unmaps list-directory
+(keymap-global-unset "C-x C-d") ;; unmaps list-directory
 
 (global-set-key (kbd "H-t n") #'tab-next)
 (global-set-key (kbd "H-t c") #'tab-close)
