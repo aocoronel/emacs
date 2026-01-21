@@ -170,7 +170,6 @@
 (setq ispell-program-name "aspell"
       ispell-dictionary "en_US"
       ispell-extra-args '("--add-extra-dicts=pt_BR"))
-(add-hook 'org-mode-hook #'flyspell-mode)
 (add-hook 'markdown-mode-hook #'flyspell-mode)
 (setq flyspell-issue-message-flag nil)
 (setq flyspell-issue-welcome-flag nil)
@@ -236,12 +235,11 @@ compilation-error-regexp-alist-alist
 (setq global-auto-revert-non-file-buffers t)
 (setq auto-revert-use-notify t)
 
-;; Word wrapping for markdown & org-mode
+;; Word wrapping for markdown
 (defun rc/enable-word-wrap ()
   (interactive)
   (toggle-word-wrap 1))
 (add-hook 'markdown-mode-hook 'rc/enable-word-wrap)
-(add-hook 'org-mode-hook 'rc/enable-word-wrap)
 
 ;; http://stackoverflow.com/questions/13794433/how-to-disable-autosave-for-tramp-buffers-in-emacs
 (setq tramp-auto-save-directory "/tmp")
@@ -312,50 +310,6 @@ This command does the inverse of `fill-paragraph'."
                    (list (region-beginning) (region-end))
                  (list (point-min) (point-min))))
   (rgrep (buffer-substring-no-properties beg end) "*" (pwd)))
-
-;; === Org Mode ===
-
-(setq org-export-backends '(md))
-(setq org-agenda-files (list "~/org/"))
-(setq org-directory "~/org/"
-      org-default-notes-file (expand-file-name "notes.org" org-directory)
-      org-ellipsis " ▾" ;; Folding symbol
-      org-log-done nil
-      org-startup-folded 'content
-      org-hide-emphasis-markers t
-      org-table-convert-region-max-lines 20000
-      org-todo-keywords
-      '((sequence "TODO(t)" "|" "DONE(d!)")))
-
-(setq org-startup-with-inline-images t
-      org-image-actual-width nil)
-
-(setq org-agenda-prefix-format '((agenda . "  %-12:i%?-12t% s")
-                                (todo . " %i ")
-                                (tags . " %i ")
-                                (search . " %i ")))
-
-(setq org-capture-templates
-      '(("p" "Capture task" entry
-         (file "~/org/todo.org")
-         "* TODO %?\n")))
-
-(setq org-fancy-priorities-list '("[A]" "[B]" "[C]")
-      org-priority-faces '((?A . (:foreground "#fc2020" :weight bold))
-                           (?B . (:foreground "#fcae5f" :weight bold))
-                           (?C . (:foreground "#f9fc5f" :weight bold)))
-      org-agenda-block-separator 8411)
-
-(setq org-agenda-custom-commands
-      '(("p" "Personal"
-         ((agenda ""
-                  ((org-agenda-tag-filter-preset '("+personal"))))))
-        ("w" "Work"
-         ((agenda ""
-                  ((org-agenda-tag-filter-preset '("+work"))))))
-        ("u" "Unscheduled"
-         tags-todo "-SCHEDULED={.+}-DEADLINE={.+}"
-         ((org-agenda-sorting-strategy '(priority-down))))))
 
 ;; === Packages ===
 
@@ -683,9 +637,6 @@ This command does the inverse of `fill-paragraph'."
 (global-set-key (kbd "C-x C-g") 'find-file-at-point)
 (global-set-key (kbd "C-c i m") 'imenu)
 (global-set-key (kbd "H-f") 'find-file-at-point)
-
-(global-set-key (kbd "C-x a") 'org-agenda)
-(global-set-key (kbd "C-c C-x j") #'org-clock-jump-to-current-clock)
 
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
