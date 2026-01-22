@@ -140,6 +140,7 @@
 
 ;; Isearch wraps the buffer
 (setq isearch-wrap-pause 'no)
+(setq search-whitespace-regexp ".*?")
 
 (setq x-alt-keysym 'meta)
 (setq confirm-kill-emacs 'y-or-n-p)
