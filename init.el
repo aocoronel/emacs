@@ -688,7 +688,7 @@ This command does the inverse of `fill-paragraph'."
 
 (global-set-key (kbd "C-c s") #'surround-with-next-char)
 
-(global-set-key (kbd "C-S-k") #'kill-whole-line)
+(global-set-key (kbd "C-M-k") #'kill-whole-line)
 
 (define-key dired-mode-map (kbd "r") #'wdired-change-to-wdired-mode)
 
