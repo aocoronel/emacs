@@ -365,7 +365,7 @@ This command does the inverse of `fill-paragraph'."
 
 (rc/require 'evil 'evil-leader)
 
-(evil-leader-mode 1)
+(global-evil-leader-mode 1)
 (evil-mode 1)
 
 ;; === GNU Global ===
@@ -463,7 +463,6 @@ This command does the inverse of `fill-paragraph'."
 
 ;; === Dired ===
 
-(rc/require 'dired-preview)
 (require 'dired-x)
 (setq dired-omit-files
       (concat dired-omit-files "\\|^\\..+$"))
