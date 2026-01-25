@@ -416,7 +416,7 @@ This command does the inverse of `fill-paragraph'."
             (setq-local fill-paragraph-function 'astyle-buffer)))
 
 (require 'c3-mode)
-(add-to-list 'auto-mode-alist '("\\.[c3]\\'" . simpc-mode))
+(add-to-list 'auto-mode-alist '("\\.(c3)\\'" . c3-mode))
 (add-hook 'c3-mode-hook
           (lambda ()
             (interactive)
@@ -430,7 +430,6 @@ This command does the inverse of `fill-paragraph'."
                             (quote eval-print-last-sexp))))
 
 (rc/require 'markdown-mode)
-(rc/require 'zig-mode)
 
 ;; === Formatter ===
 
@@ -523,12 +522,15 @@ This command does the inverse of `fill-paragraph'."
 (setq jsonrpc-event-hook nil)
 (setq eglot-events-buffer-config '(:size 0 :format short))
 
-(add-hook 'zig-mode-hook #'eglot-ensure)
 (add-hook 'c-mode-hook #'eglot-ensure)
+;; (add-hook 'c3-mode-hook #'eglot-ensure)
 
 (with-eval-after-load 'eglot
   (add-to-list 'eglot-server-programs
-               '(markdown-mode . ("harper-ls" "--stdio"))))
+               '(markdown-mode . ("harper-ls" "--stdio")))
+  ;; (add-to-list 'eglot-server-programs
+  ;;              '(c3-mode . ("c3lsp")))
+  )
 
 (setq eglot-ignored-server-capabilities
       '(
@@ -573,7 +575,6 @@ This command does the inverse of `fill-paragraph'."
       company-tooltip-margin 1)
 
 (global-company-mode)
-
 
 ;; === Orderless ===
 
@@ -730,7 +731,7 @@ This command does the inverse of `fill-paragraph'."
   "ff" 'find-file
   "fc" 'find-file
   "fg" 'projectile-find-file
-  "d" 'dired
+  "d" 'dired-jump
   "c" 'compile
   "C" 'recompile
   "," 'switch-to-buffer
