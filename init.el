@@ -22,14 +22,14 @@
 
 (setq x-underline-at-descent-line t)
 
-(setq remote-file-name-inhibit-cache 50)
-
-(setq imenu-auto-rescan t)
-(setq imenu-max-item-length 160)
-(setq next-line-add-newlines nil)
-(setq bookmark-save-flag 1)
-
-(setq uniquify-buffer-name-style 'forward)
+;; (setq remote-file-name-inhibit-cache 50)
+;;
+;; (setq imenu-auto-rescan t)
+;; (setq imenu-max-item-length 160)
+;; (setq next-line-add-newlines nil)
+;; (setq bookmark-save-flag 1)
+;;
+;; (setq uniquify-buffer-name-style 'forward)
 
 (setq create-lockfiles nil)
 (setq make-backup-files t)
@@ -355,6 +355,19 @@ This command does the inverse of `fill-paragraph'."
 (rc/require 'visual-replace)
 (global-set-key (kbd "C-c r") #'visual-replace-from-isearch)
 
+;; === Eldoc Box ===
+
+(rc/require 'eldoc-box)
+
+;; === Evil ===
+
+(setq evil-want-C-u-scroll t)
+
+(rc/require 'evil 'evil-leader)
+
+(evil-leader-mode 1)
+(evil-mode 1)
+
 ;; === GNU Global ===
 
 (rc/require 'ggtags)
@@ -367,27 +380,15 @@ This command does the inverse of `fill-paragraph'."
 (setq buffer-terminator-interval (* 10 60))
 (setq buffer-terminator-mode 1)
 
-;; === God Mode ===
-
-(rc/require'god-mode)
-(god-mode)
-(global-set-key (kbd "<escape>") #'god-local-mode)
-(require 'god-mode-isearch)
-(defun my-god-mode-update-cursor-type ()
-  (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
-
-(add-hook 'post-command-hook #'my-god-mode-update-cursor-type)
-
 ;; === Ido Vertical Mode ===
 
 (rc/require 'ido-vertical-mode)
 (ido-vertical-mode 1)
 (setq ido-vertical-define-keys 'C-n-and-C-p-only)
 
-;; === Imenu Anywhere ===
+;; === Imenu ===
 
-(rc/require 'imenu-anywhere)
-(global-set-key (kbd "C-.") #'imenu-anywhere)
+(rc/require 'imenu-anywhere 'imenu-list)
 
 ;; === Expand ===
 
@@ -410,6 +411,13 @@ This command does the inverse of `fill-paragraph'."
 (add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
 (add-to-list 'auto-mode-alist '("\\.[b]\\'" . simpc-mode))
 (add-hook 'simpc-mode-hook
+          (lambda ()
+            (interactive)
+            (setq-local fill-paragraph-function 'astyle-buffer)))
+
+(require 'c3-mode)
+(add-to-list 'auto-mode-alist '("\\.[c3]\\'" . simpc-mode))
+(add-hook 'c3-mode-hook
           (lambda ()
             (interactive)
             (setq-local fill-paragraph-function 'astyle-buffer)))
@@ -664,18 +672,10 @@ This command does the inverse of `fill-paragraph'."
 
 (global-set-key (kbd "S-M-<backspace>") 'backward-mark-word)
 
-(define-key isearch-mode-map (kbd "<escape>") #'god-mode-isearch-activate)
-(define-key god-mode-isearch-map (kbd "<escape>") #'god-mode-isearch-disable)
-(define-key god-local-mode-map (kbd "i") #'god-local-mode)
-(global-set-key (kbd "<escape>") #'(lambda () (interactive) (god-local-mode 1)))
-(define-key god-local-mode-map (kbd ".") #'repeat)
 (global-set-key (kbd "C-x C-1") #'delete-other-windows)
 (global-set-key (kbd "C-x C-2") #'split-window-below)
 (global-set-key (kbd "C-x C-3") #'split-window-right)
 (global-set-key (kbd "C-x C-0") #'delete-window)
-
-(define-key god-local-mode-map (kbd "[") #'backward-paragraph)
-(define-key god-local-mode-map (kbd "]") #'forward-paragraph)
 
 (define-key dired-mode-map (kbd "b") #'dired-up-directory)
 
@@ -695,6 +695,47 @@ This command does the inverse of `fill-paragraph'."
 ;; Removes all non-required packages
 (setq package-selected-packages rc/required-packages)
 (package-autoremove)
+
+(global-set-key (kbd "C-.") #'imenu-anywhere)
+(global-set-key (kbd "C-'") #'imenu-list-smart-toggle)
+
+;; Multiple Cursors
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->")         'mc/mark-next-like-this)
+(global-set-key (kbd "C-<")         'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<")     'mc/mark-all-like-this)
+(global-set-key (kbd "C-\"")        'mc/skip-to-next-like-this)
+(global-set-key (kbd "C-:")         'mc/skip-to-previous-like-this)
+
+;; Evil Mode
+
+;; I tried Doom Emacs... sucks
+;; I tried Emacs Vanilla... sucks
+;; So now: Emacs + Vim for the ultimate text editing experience
+(defalias 'evil-insert-state 'evil-emacs-state)
+(define-key evil-emacs-state-map (kbd "<escape>") 'evil-normal-state)
+(setq evil-emacs-state-cursor '(bar . 1))
+
+;; Restore some Emacs bindings in Evil
+(define-key evil-normal-state-map (kbd "C-e") 'move-end-of-line)
+
+(define-key evil-normal-state-map (kbd "K") 'eldoc-box-help-at-point)
+
+(define-key evil-normal-state-map (kbd "gcc") 'comment-line)
+(define-key evil-visual-state-map (kbd "gc") 'comment-line)
+(evil-leader/set-leader "<SPC>")
+(evil-leader/set-key
+  "g" 'magit
+  "ca" 'yas-new-snippet
+  "cf" 'format-all-buffer
+  "ff" 'find-file
+  "fc" 'find-file
+  "fg" 'projectile-find-file
+  "d" 'dired
+  "c" 'compile
+  "C" 'recompile
+  "," 'switch-to-buffer
+  "k" 'kill-buffer)
 
 (setq custom-file "~/.emacs.d/custom.el")
 (when (file-exists-p custom-file)
