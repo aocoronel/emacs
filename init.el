@@ -433,9 +433,15 @@ This command does the inverse of `fill-paragraph'."
 
 ;; === Formatter ===
 
-(rc/require 'format-all)
-(setq format-all-show-errors 'warnings)
-(add-hook 'prog-mode-hook #'format-all-mode)
+(rc/require 'reformatter)
+
+(reformatter-define simpc-format
+  :program "clang-format"
+  :group 'c)
+
+(add-hook 'simpc-mode-hook
+          (lambda ()
+            (simpc-format-on-save-mode)))
 
 ;; === Timemachine ===
 
