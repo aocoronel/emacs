@@ -209,6 +209,14 @@
     (insert char)
     (goto-char (+ beg 1))))
 
+(defun my/open-eshell-here ()
+  "Open Eshell in the current buffer's directory."
+  (interactive)
+  (let ((default-directory (or (and (buffer-file-name)
+                                    (file-name-directory (buffer-file-name)))
+                               default-directory)))
+    (eshell t)))
+
 (defun backward-mark-word (arg)
    "Similar to M-d, but backwards"
    (interactive "p")
@@ -355,10 +363,6 @@ This command does the inverse of `fill-paragraph'."
 (rc/require 'visual-replace)
 (global-set-key (kbd "C-c r") #'visual-replace-from-isearch)
 
-;; === Eldoc Box ===
-
-(rc/require 'eldoc-box)
-
 ;; === Evil ===
 
 (setq evil-want-C-u-scroll t)
@@ -398,7 +402,7 @@ This command does the inverse of `fill-paragraph'."
 ;; === Programming Major Modes ===
 
 ;; c-mode
-(setq-default c-basic-offset 4
+(setq-default c-basic-offset 8
               c-default-style '((java-mode . "java")
                                 (awk-mode . "awk")
                                 (other . "bsd")))
@@ -407,27 +411,16 @@ This command does the inverse of `fill-paragraph'."
                          (interactive)
                          (c-toggle-comment-style -1)))
 
-(require 'simpc-mode)
-(add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
-(add-to-list 'auto-mode-alist '("\\.[b]\\'" . simpc-mode))
-(add-hook 'simpc-mode-hook
-          (lambda ()
-            (interactive)
-            (setq-local fill-paragraph-function 'astyle-buffer)))
+;; (require 'simpc-mode)
+;; (add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
+;; (add-to-list 'auto-mode-alist '("\\.[b]\\'" . simpc-mode))
+;; (add-hook 'simpc-mode-hook
+;;           (lambda ()
+;;             (interactive)
+;;             (setq-local fill-paragraph-function 'astyle-buffer)))
 
-(require 'c3-mode)
-(add-to-list 'auto-mode-alist '("\\.(c3)\\'" . c3-mode))
-(add-hook 'c3-mode-hook
-          (lambda ()
-            (interactive)
-            (setq-local fill-paragraph-function 'astyle-buffer)))
-
-;; elisp-mode
-
-(add-hook 'emacs-lisp-mode-hook
-          '(lambda ()
-             (local-set-key (kbd "C-c C-j")
-                            (quote eval-print-last-sexp))))
+(add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . csharp-mode))
+(add-to-list 'auto-mode-alist '("\\.[b]\\'" . csharp-mode))
 
 (rc/require 'markdown-mode)
 
@@ -435,13 +428,13 @@ This command does the inverse of `fill-paragraph'."
 
 (rc/require 'reformatter)
 
-(reformatter-define simpc-format
+(reformatter-define csharp-format
   :program "clang-format"
   :group 'c)
 
-(add-hook 'simpc-mode-hook
+(add-hook 'csharp-mode-hook
           (lambda ()
-            (simpc-format-on-save-mode)))
+            (csharp-format-on-save-mode)))
 
 ;; === Timemachine ===
 
@@ -460,7 +453,7 @@ This command does the inverse of `fill-paragraph'."
 (rc/require 'magit-todos)
 (magit-todos-mode 1)
 (setq magit-todos-keywords
-      '("TODO" "FIXME" "BUG" "HACK" "NOTE"))
+      '("TODO" "FIX" "BUG" "HACK" "NOTE"))
 
 ;; === Multiple Cursors ===
 
@@ -514,56 +507,6 @@ This command does the inverse of `fill-paragraph'."
 
 (rc/require 'move-text)
 
-;; === LSP ===
-
-(rc/require 'eglot)
-(setq eglot-autoshutdown t
-      eglot-send-changes-idle-time 0.5
-      eglot-sync-connect 0
-      eglot-sync-connect nil)
-(setq eglot-events-buffer-size 0)
-(setq jsonrpc-default-request-timeout 5)
-(setq eglot-report-progress nil)
-
-(setq jsonrpc-event-hook nil)
-(setq eglot-events-buffer-config '(:size 0 :format short))
-
-(add-hook 'c-mode-hook #'eglot-ensure)
-;; (add-hook 'c3-mode-hook #'eglot-ensure)
-
-(with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs
-               '(markdown-mode . ("harper-ls" "--stdio")))
-  ;; (add-to-list 'eglot-server-programs
-  ;;              '(c3-mode . ("c3lsp")))
-  )
-
-(setq eglot-ignored-server-capabilities
-      '(
-;;         :hoverProvider
-;;         :completionProvider
-;;         :signatureHelpProvider
-;;         :definitionProvider
-;;         :typeDefinitionProvider
-;;         :implementationProvider
-;;         :declarationProvider
-;;         :referencesProvider
-         :documentHighlightProvider
-;;         :documentSymbolProvider
-;;         :workspaceSymbolProvider
-         :codeActionProvider
-         :codeLensProvider
-;;         :documentFormattingProvider
-         :documentRangeFormattingProvider
-         :documentOnTypeFormattingProvider
-         :renameProvider
-         :documentLinkProvider
-;;         :colorProvider
-         :foldingRangeProvider
-         :executeCommandProvider
-;;         :inlayHintProvider
-         ))
-
 ;; === Projectile ===
 
 (rc/require 'rg)
@@ -597,9 +540,7 @@ This command does the inverse of `fill-paragraph'."
       completion-category-overrides '((file (styles partial-completion))))
 
 (setq completion-at-point-functions
-      '( elisp-completion-at-point
-        ; eglot-completion-at-point
-        ))
+      '(elisp-completion-at-point))
 
 ;; === Zoxide ===
 
@@ -616,6 +557,10 @@ This command does the inverse of `fill-paragraph'."
   "Jump to a zoxide directory."
   (interactive)
   (cd (zoxide-find-file)))
+
+;; === Undo Fu ===
+
+(rc/require 'undo-fu)
 
 ;; === Rainbow ===
 
@@ -713,6 +658,10 @@ This command does the inverse of `fill-paragraph'."
 (global-set-key (kbd "C-\"")        'mc/skip-to-next-like-this)
 (global-set-key (kbd "C-:")         'mc/skip-to-previous-like-this)
 
+(global-unset-key (kbd "C-/"))
+(global-set-key (kbd "C-/")   'undo-fu-only-undo)
+(global-set-key (kbd "C-S-/") 'undo-fu-only-redo)
+
 ;; Evil Mode
 
 ;; I tried Doom Emacs... sucks
@@ -724,8 +673,6 @@ This command does the inverse of `fill-paragraph'."
 
 ;; Restore some Emacs bindings in Evil
 (define-key evil-normal-state-map (kbd "C-e") 'move-end-of-line)
-
-(define-key evil-normal-state-map (kbd "K") 'eldoc-box-help-at-point)
 
 (define-key evil-normal-state-map (kbd "gcc") 'comment-line)
 (define-key evil-visual-state-map (kbd "gc") 'comment-line)
@@ -739,6 +686,7 @@ This command does the inverse of `fill-paragraph'."
   "fg" 'projectile-find-file
   "d" 'dired-jump
   "c" 'compile
+  "e" 'my/open-eshell-here
   "C" 'recompile
   "," 'switch-to-buffer
   "k" 'kill-buffer)
