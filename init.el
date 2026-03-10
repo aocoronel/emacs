@@ -372,16 +372,25 @@ This command does the inverse of `fill-paragraph'."
 (global-evil-leader-mode 1)
 (evil-mode 1)
 
+;; === VTerm ===
+
+(rc/require 'vterm)
+
 ;; === GNU Global ===
 
 (rc/require 'ggtags)
+
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            (when (derived-mode-p 'csharp-mode 'c-mode 'c++-mode 'java-mode)
+              (ggtags-mode 1))))
 
 ;; === Buffer Terminator ===
 
 (rc/require 'buffer-terminator)
 (setq buffer-terminator-verbose nil)
-(setq buffer-terminator-inactivity-timeout (* 15 60))
-(setq buffer-terminator-interval (* 10 60))
+(setq buffer-terminator-inactivity-timeout (* 10 60))
+(setq buffer-terminator-interval (* 5 60))
 (setq buffer-terminator-mode 1)
 
 ;; === Ido Vertical Mode ===
@@ -524,6 +533,7 @@ This command does the inverse of `fill-paragraph'."
       company-tooltip-margin 1)
 
 (global-company-mode)
+(add-to-list 'company-backends 'company-gtags)
 
 ;; === Orderless ===
 
@@ -673,6 +683,7 @@ This command does the inverse of `fill-paragraph'."
 
 ;; Restore some Emacs bindings in Evil
 (define-key evil-normal-state-map (kbd "C-e") 'move-end-of-line)
+(define-key evil-normal-state-map (kbd "gf") 'ggtags-find-file)
 
 (define-key evil-normal-state-map (kbd "gcc") 'comment-line)
 (define-key evil-visual-state-map (kbd "gc") 'comment-line)
@@ -686,6 +697,7 @@ This command does the inverse of `fill-paragraph'."
   "fg" 'projectile-find-file
   "d" 'dired-jump
   "c" 'compile
+  "t" 'vterm
   "e" 'my/open-eshell-here
   "C" 'recompile
   "," 'switch-to-buffer
