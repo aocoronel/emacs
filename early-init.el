@@ -1,22 +1,3 @@
-;; Performance
-
-;; Compile flags
-
-;; ./configure CFLAGS="-march=native -Ofast -fno-finite-math-only -pipe \
-;; -fgraphite-identity -floop-nest-optimize -fdevirtualize-at-ltrans -fipa-pta \
-;; -fno-semantic-interposition" \
-;; --without-compress-install --with-x-toolkit=lucid \
-;; --with-xft --with-xaw3d --without-toolkit-scroll-bars --without-gsettings \
-;; --with-native-compilation=aot --with-tree-sitter --with-x --with-sound=no \
-;; --without-libsystemd --without-selinux  \
-;; --prefix=/usr/local --with-imagemagick
-
-;; Dependencies
-;; libotf
-;; libxaw
-;; m17n-lib
-;; libgccjit
-
 (setq gc-cons-threshold 35000000
       gc-cons-percentage 0.6)
 (setq read-process-output-max (* 1024 1024))
@@ -29,14 +10,6 @@
   (setq features (delq 'native-compile features)))
 
 (setq load-prefer-newer t)
-(setq native-comp-speed 3)
-(native-compile-async "/usr/local/lib/emacs/30.2.50/native-lisp" 'recursively)
-(setq native-comp-compiler-options '("-march=x86-64" "-Ofast" "-g0" "-fno-finite-math-only" "-fgraphite-identity" "-floop-nest-optimize" "-fdevirtualize-at-ltrans" "-fipa-pta" "-fno-semantic-interposition" "-flto=auto" "-fuse-linker-plugin"))
-(setq native-comp-driver-options '("-march=x86-64" "-Ofast" "-g0" "-fno-finite-math-only" "-fgraphite-identity" "-floop-nest-optimize" "-fdevirtualize-at-ltrans" "-fipa-pta" "-fno-semantic-interposition" "-flto=auto" "-fuse-linker-plugin"))
-
-(setq native-comp-deferred-compilation nil
-      native-comp-speed 0
-      native-comp-async-report-warnings-errors 'silent)
 
 ;; Ignore Warnings
 
