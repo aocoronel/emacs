@@ -363,14 +363,15 @@ This command does the inverse of `fill-paragraph'."
 (rc/require 'visual-replace)
 (global-set-key (kbd "C-c r") #'visual-replace-from-isearch)
 
-;; === Evil ===
+;; === God Mode ===
 
-(setq evil-want-C-u-scroll t)
+(rc/require 'god-mode)
+(require 'god-mode-isearch)
 
-(rc/require 'evil 'evil-leader)
+(setq god-mode-enable-function-key-translation nil)
 
-(global-evil-leader-mode 1)
-(evil-mode 1)
+(custom-set-faces
+ '(god-mode-lighter ((t (:inherit error)))))
 
 ;; === VTerm ===
 
@@ -532,8 +533,8 @@ This command does the inverse of `fill-paragraph'."
       company-auto-complete nil
       company-tooltip-margin 1)
 
-(global-company-mode)
 (add-to-list 'company-backends 'company-gtags)
+(global-company-mode)
 
 ;; === Orderless ===
 
@@ -672,36 +673,10 @@ This command does the inverse of `fill-paragraph'."
 (global-set-key (kbd "C-/")   'undo-fu-only-undo)
 (global-set-key (kbd "C-S-/") 'undo-fu-only-redo)
 
-;; Evil Mode
-
-;; I tried Doom Emacs... sucks
-;; I tried Emacs Vanilla... sucks
-;; So now: Emacs + Vim for the ultimate text editing experience
-(defalias 'evil-insert-state 'evil-emacs-state)
-(define-key evil-emacs-state-map (kbd "<escape>") 'evil-normal-state)
-(setq evil-emacs-state-cursor '(bar . 1))
-
-;; Restore some Emacs bindings in Evil
-(define-key evil-normal-state-map (kbd "C-e") 'move-end-of-line)
-(define-key evil-normal-state-map (kbd "gf") 'ggtags-find-file)
-
-(define-key evil-normal-state-map (kbd "gcc") 'comment-line)
-(define-key evil-visual-state-map (kbd "gc") 'comment-line)
-(evil-leader/set-leader "<SPC>")
-(evil-leader/set-key
-  "g" 'magit
-  "ca" 'yas-new-snippet
-  "cf" 'format-all-buffer
-  "ff" 'find-file
-  "fc" 'find-file
-  "fg" 'projectile-find-file
-  "d" 'dired-jump
-  "c" 'compile
-  "t" 'vterm
-  "e" 'my/open-eshell-here
-  "C" 'recompile
-  "," 'switch-to-buffer
-  "k" 'kill-buffer)
+(global-set-key (kbd "C-x C-1") #'delete-other-windows)
+(global-set-key (kbd "C-x C-2") #'split-window-below)
+(global-set-key (kbd "C-x C-3") #'split-window-right)
+(global-set-key (kbd "C-x C-0") #'delete-window)
 
 (setq custom-file "~/.emacs.d/custom.el")
 (when (file-exists-p custom-file)

@@ -97,4 +97,10 @@
 (setq tls-checktrust t)
 (setq gnutls-min-prime-bits 3072)
 
+(keymap-global-unset "C-z")
+(keymap-global-unset "C-x C-z")
+
+(global-set-key (kbd "C-z") 'god-mode-all)
+(global-set-key (kbd "C-.") 'repeat)
+
 (setq read-extended-command-predicate #'command-completion-default-include-p)
