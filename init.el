@@ -533,7 +533,7 @@ This command does the inverse of `fill-paragraph'."
       company-auto-complete nil
       company-tooltip-margin 1)
 
-(add-to-list 'company-backends 'company-gtags)
+;;(add-to-list 'company-backends 'company-gtags)
 (global-company-mode)
 
 ;; === Orderless ===
@@ -677,6 +677,13 @@ This command does the inverse of `fill-paragraph'."
 (global-set-key (kbd "C-x C-2") #'split-window-below)
 (global-set-key (kbd "C-x C-3") #'split-window-right)
 (global-set-key (kbd "C-x C-0") #'delete-window)
+
+;; Windows
+
+(global-set-key (kbd "M-H")  'windmove-left)
+(global-set-key (kbd "M-L")  'windmove-right)
+(global-set-key (kbd "M-K")  'windmove-up)
+(global-set-key (kbd "M-J")  'windmove-down)
 
 (setq custom-file "~/.emacs.d/custom.el")
 (when (file-exists-p custom-file)
