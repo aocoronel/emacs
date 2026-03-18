@@ -1,4 +1,4 @@
-;; TODO
+;; -*- lexical-binding: t; -*-
 ;; (desktop-save) ;; sessions
 ;; (eww) ;; browser
 
@@ -533,7 +533,6 @@ This command does the inverse of `fill-paragraph'."
       company-auto-complete nil
       company-tooltip-margin 1)
 
-;;(add-to-list 'company-backends 'company-gtags)
 (global-company-mode)
 
 ;; === Orderless ===
@@ -549,9 +548,6 @@ This command does the inverse of `fill-paragraph'."
 (setq completion-styles '(basic orderless)
       completion-category-defaults nil
       completion-category-overrides '((file (styles partial-completion))))
-
-(setq completion-at-point-functions
-      '(elisp-completion-at-point))
 
 ;; === Zoxide ===
 
