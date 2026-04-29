@@ -3,92 +3,189 @@
 ;; Some useful configs from: https://github.com/jamescherti/minimal-emacs.d
 (load-file "~/.emacs.d/minimal-emacs.el")
 
-(setq completions-detailed t)
-(setq ffap-machine-p-known 'reject)
-
-(setq-default bidi-display-reordering 'left-to-right
-              bidi-paragraph-direction 'left-to-right)
-(setq bidi-inhibit-bpa t)
-
-(blink-cursor-mode 0)
-(which-key-mode 1)
-(setq which-key-separator "  ")
-(setq which-key-prefix-prefix "... ")
-(setq which-key-idle-delay 1.0)
-(setq which-key-idle-secondary-delay 0.25)
-(setq which-key-add-column-padding 1)
-(setq which-key-max-description-length 40)
-(setq which-func-update-delay 1.0)
-
-(delete-selection-mode 1)
 (add-to-list 'load-path "~/.emacs.d/local/")
 
-(keymap-unset minibuffer-local-completion-map "SPC")
-(setq vc-follow-symlinks t)
-(setq find-file-visit-truename t)
+;; emacs builtins
+(require 'compile)
+(require 'dired-x)
 
-'(set-mark-command-repeat-pop t)
+(setq
+ ;; recentf
+ recentf-max-saved-items 300 ; default is 20
+ recentf-max-menu-items 15
+ recentf-auto-cleanup 'mode
+ recentf-exclude nil
 
-;; Isearch wraps the buffer
-(setq isearch-wrap-pause 'no)
-(setq search-whitespace-regexp ".*?")
+ ;; Spelling
+ ispell-program-name "aspell"
+ ispell-dictionary "en_US"
+ ispell-extra-args
+ '("--add-extra-dicts=pt_BR")
+ flyspell-issue-message-flag nil
+ flyspell-issue-welcome-flag nil
 
-(setq x-alt-keysym 'meta)
-(setq confirm-kill-emacs 'y-or-n-p)
+ ;; Smooth scrolling
+ scroll-conservatively 20
+ hscroll-margin 10
+ scroll-margin 30
+ next-screen-context-lines 0
 
-(setq display-line-numbers-type 'relative)
-(setq-default fill-column 100)
-(setq whitespace-line-column nil)
+ ;; flymake
+ flymake-no-changes-timeout 0.5
+ flymake-start-on-save-buffer t
+ flymake-start-on-flymake-mode t
+ flymake-show-diagnostics-at-end-of-line nil
+ flymake-wrap-around nil
+
+ ;; isearch
+ isearch-wrap-pause 'no
+ search-whitespace-regexp ".*?"
+ isearch-lazy-count t
+ lazy-count-prefix-format
+ "(%s/%s "
+ lazy-count-suffix-format nil
+
+ vc-follow-symlinks t
+
+ find-file-visit-truename t
+
+ ffap-machine-p-known 'reject
+
+ ;; which-key
+ which-key-separator "  "
+ which-key-prefix-prefix "... "
+ which-key-idle-delay 1.0
+ which-key-idle-secondary-delay 0.25
+ which-key-add-column-padding 1
+ which-key-max-description-length 40
+ which-func-update-delay 1.0
+
+ ;; compile-mode
+ compilation-scroll-output t
+ compilation-always-kill t
+ ansi-color-for-compilation-mode t
+
+ save-interprogram-paste-before-kill t
+ auto-revert-remote-files nil
+ auto-revert-use-notify t
+ global-auto-revert-non-file-buffers t
+
+ ;; show-paren-mode
+ show-paren-delay 0.1
+ show-paren-highlight-openparen t
+ show-paren-when-point-inside-paren t
+ show-paren-when-point-in-periphery t
+
+ ;; completions
+ completion-ignore-case t
+ completions-detailed t
+
+ delete-by-moving-to-trash nil
+ kill-do-not-save-duplicates t
+
+ redisplay-skip-fontification-on-input t
+ register-use-preview t
+
+ truncate-lines t
+
+ set-mark-command-repeat-pop t ;; repeat C-u C-SPAC C-SPC...
+
+ display-line-numbers-type 'relative
+
+ fill-column 100
+
+ whitespace-line-column nil
+
+ set-mark-command-repeat-pop t
+
+ ;; tramp
+ tramp-auto-save-directory "/tmp"
+ tramp-verbose 1
+ tramp-completion-reread-directory-timeout 50
+
+ ;; tabs
+ tab-always-indent 'complete
+ tab-width 4
+ indent-tabs-mode nil
+
+ ;; grep
+ grep-command "grep -rn "
+ grep-find-ignored-directories
+ '(".git" "build")
+
+ ;; dired
+ dired-omit-files
+ (concat dired-omit-files "\\|^\\..+$")
+ dired-dwim-target t
+ dired-listing-switches "-alh"
+ dired-mouse-drag-files t
+ dired-free-space nil
+ dired-dwim-target t  ; Propose a target for intelligent moving/copying
+ dired-deletion-confirmer 'y-or-n-p
+ dired-filter-verbose nil
+ dired-recursive-deletes 'top
+ dired-recursive-copies 'always
+ dired-vc-rename-file t
+ dired-create-destination-dirs 'ask
+ dired-kill-when-opening-new-dired-buffer t
+ dired-listing-switches "--group-directories-first -ahlv"
+ dired-clean-confirm-killing-deleted-buffers nil
+ dired-auto-revert-buffer 'dired-buffer-stale-p
+ dired-omit-files
+ (concat "\\|^__pycache__\\'"
+         "\\|^\\.project\\(?:ile\\)?\\'"
+         "\\|^flycheck_.*"
+         "\\|^flymake_.*")
+ ls-lisp-verbosity nil
+ ls-lisp-dirs-first t
+ dired-guess-shell-alist-user
+ '(("\\.\\(png\\|jpe?g\\|tiff\\)" "xdg-open")
+   ("\\.\\(mp[34]\\|m4a\\|ogg\\|flac\\|webm\\|mkv\\)" "mpv")
+   (".*" "xdg-open"))
+
+ ibuffer-human-readable-size t
+ use-short-answers t
+ read-answer-short t)
+
+;; === Emacs modes ===
+
+(blink-cursor-mode 0)
+(delete-selection-mode 1)
+(electric-pair-mode 1)
+(recentf-mode 1)
+(repeat-mode 1)
+(save-place-mode 1)
+(savehist-mode 1)
+(show-paren-mode 1)
+(which-key-mode 1)
+(winner-mode 1)
 (global-display-fill-column-indicator-mode)
 (global-display-line-numbers-mode)
+(global-auto-revert-mode 1)
 
-(setq custom-buffer-done-kill t)
+;; https://stackoverflow.com/questions/23207938/in-emacs-how-to-enable-automatic-hiding-of-dired-details
+(add-hook 'dired-mode-hook (lambda () (dired-hide-details-mode 1)))
 
-;; Smooth scrolling
-(setq scroll-conservatively 20)
-(setq hscroll-margin 10)
-(setq scroll-margin 30)
-(setq next-screen-context-lines 0)
+(add-hook 'compilation-filter-hook #'ansi-color-compilation-filter)
 
-;; Syntax highlighting
-(setq flymake-no-changes-timeout 0.5
-      flymake-start-on-save-buffer t
-      flymake-start-on-flymake-mode t)
+(add-to-list 'compilation-error-regexp-alist
+             '("\\([a-zA-Z0-9\\.]+\\)(\\([0-9]+\\)\\(,\\([0-9]+\\)\\)?) \\(Warning:\\)?"
+               1 2
+	       (4)
+	       (5)))
 
-(setq flymake-show-diagnostics-at-end-of-line nil)
-(setq flymake-wrap-around nil)
+(defun aoc/turn-on-eldoc-mode () (interactive) (eldoc-mode 1))
+(add-hook 'elisp-mode-hook 'aoc/turn-on-eldoc-mode)
 
-;; Spelling
-(setq ispell-program-name "aspell"
-      ispell-dictionary "en_US"
-      ispell-extra-args '("--add-extra-dicts=pt_BR"))
-(add-hook 'markdown-mode-hook #'flyspell-mode)
-(setq flyspell-issue-message-flag nil)
-(setq flyspell-issue-welcome-flag nil)
-
-(setq recentf-max-saved-items 300) ; default is 20
-(setq recentf-max-menu-items 15)
-(setq recentf-auto-cleanup 'mode)
-(setq recentf-exclude nil)
-(recentf-mode 1)
-
-;; === Appearance ===
-
-(require 'ansi-color)
-(defun rc/colorize-compilation-buffer ()
-  "Colorize the compilation buffer using ansi-color"
-  (read-only-mode 'toggle)
-  (ansi-color-apply-on-region compilation-filter-start (point))
-  (read-only-mode 'toggle))
-(add-hook 'compilation-filter-hook 'rc/colorize-compilation-buffer)
+;; Delete trailing whitespaces
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; === Custom Functions ===
 
 (defun kill-all-other-buffers ()
   "Kill all buffers except the current one."
   (interactive)
-  (mapc #'kill-buffer
-        (delq (current-buffer) (buffer-list))))
+  (mapc #'kill-buffer (delq (current-buffer) (buffer-list))))
 
 (defun surround-with-next-char (beg end)
   "Surround the region from BEG to END with the next input character on both sides."
@@ -100,77 +197,61 @@
     (insert char)
     (goto-char (+ beg 1))))
 
-(defun my/open-eshell-here ()
+(defun aoc/open-eshell-here ()
   "Open Eshell in the current buffer's directory."
   (interactive)
-  (let ((default-directory (or (and (buffer-file-name)
-                                    (file-name-directory (buffer-file-name)))
-                               default-directory)))
+  (let ((default-directory
+	 (or
+	  (and
+	   (buffer-file-name)
+           (file-name-directory (buffer-file-name)))
+          default-directory)))
     (eshell t)))
 
-(defun backward-mark-word (arg)
-   (interactive "p")
-   (unless (eq last-command this-command)
-    (set-mark (point)))
-   (backward-word arg)
-   (setq deactivate-mark nil))
+(defun aoc/increment-numbers-region (start end)
+  (interactive "r")
+  (let ((n 0))
+    (save-excursion
+      (goto-char start)
+      (beginning-of-line)
+      (while (< (point) end)
+        (when (re-search-forward "\\[[0-9]+\\]" (line-end-position) t)
+          (replace-match (format "[%d]" n))
+          (setq n (1+ n)))
+        (forward-line 1)))))
 
-(winner-mode 1)
+(defun backward-mark-word (arg)
+  (interactive "p")
+  (unless (eq last-command this-command) (set-mark (point)))
+  (backward-word arg)
+  (setq deactivate-mark nil))
+
 (defun toggle-max-window ()
   "Maximize window"
   (interactive)
   (if (> (count-windows) 1)
-      (progn (window-configuration-to-register :max)
-             (delete-other-windows))
+      (progn
+	(window-configuration-to-register :max)
+        (delete-other-windows))
     (jump-to-register :max)))
 
-(require 'compile)
-compilation-error-regexp-alist-alist
-(add-to-list 'compilation-error-regexp-alist
-             '("\\([a-zA-Z0-9\\.]+\\)(\\([0-9]+\\)\\(,\\([0-9]+\\)\\)?) \\(Warning:\\)?"
-               1 2 (4) (5)))
-
-(global-auto-revert-mode 1)
-(setq global-auto-revert-non-file-buffers t)
-(setq auto-revert-use-notify t)
-
-;; Word wrapping for markdown
-(defun rc/enable-word-wrap ()
-  (interactive)
-  (toggle-word-wrap 1))
-(add-hook 'markdown-mode-hook 'rc/enable-word-wrap)
-
-;; http://stackoverflow.com/questions/13794433/how-to-disable-autosave-for-tramp-buffers-in-emacs
-(setq tramp-auto-save-directory "/tmp")
-(setq tramp-verbose 1)
-(setq tramp-completion-reread-directory-timeout 50)
-
-(defun rc/turn-on-eldoc-mode ()
-  (interactive)
-  (eldoc-mode 1))
-(add-hook 'elisp-mode-hook 'rc/turn-on-eldoc-mode)
-
-;; Delete trailing whitespaces
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
 ;; http://stackoverflow.com/questions/2416655/file-path-to-clipboard-in-emacs
-(defun rc/put-file-name-on-clipboard ()
+(defun aoc/put-file-name-on-clipboard ()
   "Put the current file name on the clipboard"
   (interactive)
-  (let ((filename (if (equal major-mode 'dired-mode)
-      default-directory
-    (buffer-file-name))))
-    (when filename
-      (kill-new filename)
-      (message filename))))
+  (let ((filename
+	 (if (equal major-mode 'dired-mode)
+	     default-directory
+	   (buffer-file-name))))
+    (when filename (kill-new filename) (message filename))))
 
-(defun rc/put-buffer-name-on-clipboard ()
+(defun aoc/put-buffer-name-on-clipboard ()
   "Put the current buffer name on the clipboard"
   (interactive)
   (kill-new (buffer-name))
   (message (buffer-name)))
 
-(defun rc/kill-buffers-matching (pattern)
+(defun aoc/kill-buffers-matching (pattern)
   "Kill all buffers whose names match the given regexp PATTERN."
   (interactive "sBuffers to kill (regexp): ")
   (dolist (buffer (buffer-list))
@@ -181,40 +262,42 @@ compilation-error-regexp-alist-alist
   (message "Killed buffers matching %s" pattern))
 
 ;; http://ergoemacs.org/emacs/emacs_unfill-paragraph.html
-(defun rc/unfill-paragraph ()
+(defun aoc/unfill-paragraph ()
   "Replace newline chars in current paragraph by single spaces.
 This command does the inverse of `fill-paragraph'."
   (interactive)
-  (let ((fill-column 90002000))
-    (fill-paragraph nil)))
+  (let ((fill-column 90002000)) (fill-paragraph nil)))
 
-(defun rc/duplicate-line ()
+(defun aoc/duplicate-line ()
   "Duplicate current line"
   (interactive)
   (let ((column (- (point) (point-at-bol)))
-        (line (let ((s (thing-at-point 'line t)))
-                (if s (string-remove-suffix "\n" s) ""))))
+	(line
+	 (let ((s (thing-at-point 'line t)))
+           (if s (string-remove-suffix "\n" s) ""))))
     (move-end-of-line 1)
     (newline)
     (insert line)
     (move-beginning-of-line 1)
     (forward-char column)))
 
-(defun rc/insert-timestamp ()
+(defun aoc/insert-timestamp ()
   (interactive)
   (insert (format-time-string "%Y%m%d-%H%M%S" nil t)))
 
-(defun rc/rgrep-selected (beg end)
-  (interactive (if (use-region-p)
-                   (list (region-beginning) (region-end))
-                 (list (point-min) (point-min))))
+(defun aoc/rgrep-selected (beg end)
+  (interactive
+   (if (use-region-p)
+       (list (region-beginning) (region-end))
+     (list (point-min) (point-min))))
   (rgrep (buffer-substring-no-properties beg end) "*" (pwd)))
 
 ;; === Packages ===
 
 (package-initialize)
 (add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/") t)
+             '("melpa" . "https://melpa.org/packages/")
+	     t)
 
 ;; Tsoding's rc/require (https://github.com/rexim/dotfiles/)
 (defvar rc/package-contents-refreshed nil)
@@ -236,36 +319,16 @@ This command does the inverse of `fill-paragraph'."
     (add-to-list 'rc/required-packages package)
     (rc/require-one-package package)))
 
-(rc/require 'dash)
+;; === FIDO ===
 
-;; === IDO ===
-
-(rc/require 'smex 'ido-completing-read+)
-(require 'ido-completing-read+)
-
+(fido-mode 1)
+(fido-vertical-mode 1)
 (setq ido-enable-flex-matching t)
-(ido-mode 1)
-(ido-everywhere 1)
-(ido-ubiquitous-mode 1)
 
 ;; === Visual Replace ===
 
 (rc/require 'visual-replace)
 (global-set-key (kbd "C-c r") #'visual-replace-from-isearch)
-
-;; === God Mode ===
-
-(rc/require 'god-mode)
-(require 'god-mode-isearch)
-
-(setq god-mode-enable-function-key-translation nil)
-
-(custom-set-faces
- '(god-mode-lighter ((t (:inherit error)))))
-
-;; === VTerm ===
-
-(rc/require 'vterm)
 
 ;; === Eglot ===
 
@@ -273,48 +336,42 @@ This command does the inverse of `fill-paragraph'."
 (setq eglot-autoshutdown t
       eglot-send-changes-idle-time 0.5
       eglot-sync-connect 0
-      eglot-sync-connect nil)
-(setq eglot-events-buffer-size 0)
-(setq jsonrpc-default-request-timeout 5)
-(setq eglot-report-progress nil)
-
-(setq jsonrpc-event-hook nil)
-(setq eglot-events-buffer-config '(:size 0 :format short))
+      eglot-sync-connect nil
+      eglot-events-buffer-size 0
+      jsonrpc-default-request-timeout 5
+      eglot-report-progress nil
+      jsonrpc-event-hook nil
+      eglot-events-buffer-config '(:size 0 :format short))
 
 (add-hook 'c-mode-hook #'eglot-ensure)
 
 (setq eglot-ignored-server-capabilities
-      '(
-;;         :hoverProvider
-;;         :completionProvider
-;;         :signatureHelpProvider
-;;         :definitionProvider
-;;         :typeDefinitionProvider
-;;         :implementationProvider
-;;         :declarationProvider
-;;         :referencesProvider
-         :documentHighlightProvider
-;;         :documentSymbolProvider
-;;         :workspaceSymbolProvider
-         :codeActionProvider
-         :codeLensProvider
-         :documentFormattingProvider
-         :documentRangeFormattingProvider
-         :documentOnTypeFormattingProvider
-         :renameProvider
-         :documentLinkProvider
-         :colorProvider
-         :foldingRangeProvider
-         :executeCommandProvider
-         :inlayHintProvider
-         ))
-
-(rc/require 'command-log-mode)
+      '(;; :hoverProvider
+	    ;; :completionProvider
+	    ;; :signatureHelpProvider
+	    ;; :definitionProvider
+	    ;; :typeDefinitionProvider
+	    ;; :implementationProvider
+	    ;; :declarationProvider
+	    ;; :referencesProvider
+	    ;; :workspaceSymbolProvider
+        ;; :documentSymbolProvider
+        :documentHighlightProvider
+        :codeActionProvider
+        :codeLensProvider
+        :documentFormattingProvider
+        :documentRangeFormattingProvider
+        :documentOnTypeFormattingProvider
+        :renameProvider
+        :documentLinkProvider
+        :colorProvider
+        :foldingRangeProvider
+        :executeCommandProvider
+        :inlayHintProvider))
 
 ;; === GNU Global ===
 
 (rc/require 'ggtags)
-
 (add-hook 'c-mode-common-hook
           (lambda ()
             (when (derived-mode-p 'csharp-mode 'c-mode 'c++-mode 'java-mode)
@@ -322,38 +379,31 @@ This command does the inverse of `fill-paragraph'."
 
 ;; === Buffer Terminator ===
 
+;; Every 5 minutes kill inactives buffers
+;; Buffers get inactive after 10 minutes
+
 (rc/require 'buffer-terminator)
 (setq buffer-terminator-verbose nil)
 (setq buffer-terminator-inactivity-timeout (* 10 60))
 (setq buffer-terminator-interval (* 5 60))
 (setq buffer-terminator-mode 1)
 
-;; === Ido Vertical Mode ===
-
-(rc/require 'ido-vertical-mode)
-(ido-vertical-mode 1)
-(setq ido-vertical-define-keys 'C-n-and-C-p-only)
-
-;; === Imenu ===
-
-(rc/require 'imenu-anywhere 'imenu-list)
-
 ;; === Expand ===
 
 (rc/require 'expand-region)
-(global-set-key (kbd "C-=") 'er/expand-region)
 
 ;; === Programming Major Modes ===
 
 ;; c-mode
-(setq-default c-basic-offset 4
-              c-default-style '((java-mode . "java")
-                                (awk-mode . "awk")
-                                (other . "bsd")))
 
-(add-hook 'c-mode-hook (lambda ()
-                         (interactive)
-                         (c-toggle-comment-style -1)))
+(setq-default c-basic-offset 4
+              c-default-style
+	      '((java-mode . "java")
+                (awk-mode . "awk")
+                (other . "bsd")))
+
+(add-hook 'c-mode-hook
+	  (lambda () (interactive) (c-toggle-comment-style -1)))
 
 ;; (require 'simpc-mode)
 ;; (add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
@@ -366,28 +416,37 @@ This command does the inverse of `fill-paragraph'."
 (add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . csharp-mode))
 (add-to-list 'auto-mode-alist '("\\.[b]\\'" . csharp-mode))
 
+;; markdown
+
 (rc/require 'markdown-mode)
+(add-hook 'markdown-mode-hook #'flyspell-mode)
+
+(defun aoc/enable-word-wrap () (interactive) (toggle-word-wrap 1))
+(add-hook 'markdown-mode-hook 'aoc/enable-word-wrap)
 
 ;; === Formatter ===
 
 (rc/require 'reformatter)
 
-(reformatter-define csharp-format
-  :program "clang-format"
-  :group 'c)
+(reformatter-define c-format :program "clang-format" :group 'c)
 
 (add-hook 'csharp-mode-hook
-          (lambda ()
-            (csharp-format-on-save-mode)))
+          (lambda () (c-format-on-save-mode)))
+
+(add-hook 'c-mode-hook
+          (lambda () (c-format-on-save-mode)))
 
 ;; === Timemachine ===
 
+;; Awesome to navigate back in the history of a file, specially when you deleted something in the
+;; past that is helful in the present.
+;;
+;; This package is so useful, that even in my neovim I use GitTimeLapse
 (rc/require 'git-timemachine)
 
 ;; === Magit ===
 
-(cond
-  ((eq system-type 'windows-nt) (rc/require 'cl-lib)))
+(cond ((eq system-type 'windows-nt) (rc/require 'cl-lib)))
 
 (rc/require 'magit)
 (setq magit-auto-revert-mode nil)
@@ -396,80 +455,45 @@ This command does the inverse of `fill-paragraph'."
 
 (rc/require 'multiple-cursors)
 
-;; === Dired ===
-
-(require 'dired-x)
-(setq dired-omit-files
-      (concat dired-omit-files "\\|^\\..+$"))
-(setq-default dired-dwim-target t)
-(setq dired-listing-switches "-alh")
-(setq dired-mouse-drag-files t)
-;; https://stackoverflow.com/questions/23207938/in-emacs-how-to-enable-automatic-hiding-of-dired-details
-(add-hook 'dired-mode-hook (lambda () (dired-hide-details-mode 1)))
-
-(setq dired-free-space nil
-      dired-dwim-target t  ; Propose a target for intelligent moving/copying
-      dired-deletion-confirmer 'y-or-n-p
-      dired-filter-verbose nil
-      dired-recursive-deletes 'top
-      dired-recursive-copies 'always
-      dired-vc-rename-file t
-      dired-create-destination-dirs 'ask
-      ;; Suppress Dired buffer kill prompt for deleted dirs
-      dired-clean-confirm-killing-deleted-buffers nil)
-
-(setq auto-revert-remote-files nil)
-(setq dired-auto-revert-buffer 'dired-buffer-stale-p)
-
-(setq dired-omit-files (concat "\\|^__pycache__\\'"
-                               "\\|^\\.project\\(?:ile\\)?\\'"
-                               "\\|^flycheck_.*"
-                               "\\|^flymake_.*"))
-(with-eval-after-load 'dired
-  (let ((args "--group-directories-first -ahlv"))
-    (when args
-      (setq dired-listing-switches args))))
-
-(setq ls-lisp-verbosity nil)
-(setq ls-lisp-dirs-first t)
-
 ;; === Yasnippet ===
 
 (rc/require 'yasnippet)
-(setq yas/triggers-in-field nil)
-(setq yas-snippet-dirs '("~/.emacs.d/snippets/"))
+(setq yas/triggers-in-field nil
+ yas-snippet-dirs '("~/.emacs.d/snippets/"))
 (yas-global-mode 1)
 
 ;; === Move Text ===
 
 (rc/require 'move-text)
 
-;; === Company ===
+;; === Completion ===
 
-(rc/require 'company)
+(rc/require 'corfu 'cape)
 
-(setq company-idle-delay 0.1
-      company-minimum-prefix-length 1
-      company-selection-wrap-around t
-      company-tooltip-align-annotations t
-      company-auto-complete nil
-      company-tooltip-margin 1)
+(global-corfu-mode)
+(add-to-list 'completion-at-point-functions #'cape-dabbrev)
+(add-to-list 'completion-at-point-functions #'cape-file)
+(add-to-list 'completion-at-point-functions #'cape-history)
 
-(global-company-mode)
+(setq corfu-auto t
+      corfu-auto-delay 0.2
+      corfu-auto-prefix 2)
 
 ;; === Orderless ===
 
 (rc/require 'orderless)
-(setq orderless-matching-styles '(orderless-literal orderless-flex))
-(setq orderless-component-separator "[ &]")
+(setq
+ orderless-matching-styles '(orderless-literal orderless-flex)
+ orderless-component-separator "[ &]"
+ completion-category-defaults nil
+ icomplete-compute-delay 0.01
+ completion-pcm-leading-wildcard t)
 
-;; Completion
-
-(setq icomplete-compute-delay 0.01)
-
-(setq completion-styles '(basic orderless)
+(setq completion-styles
+      '(basic orderless)
       completion-category-defaults nil
-      completion-category-overrides '((file (styles partial-completion))))
+      completion-category-overrides
+      '((file (styles partial-completion))))
 
 ;; === Zoxide ===
 
@@ -477,18 +501,19 @@ This command does the inverse of `fill-paragraph'."
 (setq zoxide-use-cache t)
 (setq zoxide-completion-function #'completing-read)
 
-(defun my/zoxide-find-file ()
+(defun aoc/zoxide-find-file ()
   "Jump to a zoxide directory and open dired."
   (interactive)
   (dired (zoxide-find-file)))
 
-(defun my/zoxide-cd ()
+(defun aoc/zoxide-cd ()
   "Jump to a zoxide directory."
   (interactive)
   (cd (zoxide-find-file)))
 
 ;; === Undo Fu ===
 
+;; Vim-like undo
 (rc/require 'undo-fu)
 
 ;; === Rainbow ===
@@ -499,12 +524,15 @@ This command does the inverse of `fill-paragraph'."
 (add-hook 'markdown-mode-hook #'rainbow-mode)
 (add-hook 'emacs-lisp-mode-hook #'rainbow-mode)
 
+;; better than viper-mode
+(rc/require 'meow)
+
 ;; === Keybindings ===
 
-(global-set-key (kbd "C-c M-q") 'rc/unfill-paragraph)
-(global-set-key (kbd "C-,") 'rc/duplicate-line)
-(global-set-key (kbd "C-x p d") 'rc/insert-timestamp)
-(global-set-key (kbd "C-x p s") 'rc/rgrep-selected)
+(global-set-key (kbd "C-c M-q") 'aoc/unfill-paragraph)
+(global-set-key (kbd "C-,") 'aoc/duplicate-line)
+(global-set-key (kbd "C-x p d") 'aoc/insert-timestamp)
+(global-set-key (kbd "C-x p s") 'aoc/rgrep-selected)
 
 ;; Window Flow
 (windmove-default-keybindings)
@@ -522,26 +550,23 @@ This command does the inverse of `fill-paragraph'."
 (global-set-key (kbd "C-c i m") 'imenu)
 (global-set-key (kbd "H-f") 'find-file-at-point)
 
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
-
 (global-set-key (kbd "C-c m s") 'magit-status)
 (global-set-key (kbd "C-c m l") 'magit-log)
 
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-(global-set-key (kbd "C->")         'mc/mark-next-like-this)
-(global-set-key (kbd "C-<")         'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c C-<")     'mc/mark-all-like-this)
-(global-set-key (kbd "C-\"")        'mc/skip-to-next-like-this)
-(global-set-key (kbd "C-:")         'mc/skip-to-previous-like-this)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(global-set-key (kbd "C-\"") 'mc/skip-to-next-like-this)
+(global-set-key (kbd "C-:") 'mc/skip-to-previous-like-this)
 
 (global-set-key (kbd "M-p") 'move-text-up)
 (global-set-key (kbd "M-n") 'move-text-down)
 
 (global-set-key (kbd "H-z f") #'zoxide-find-file)
-(global-set-key (kbd "H-z c") #'my/zoxide-cd)
+(global-set-key (kbd "H-z c") #'aoc/zoxide-cd)
 
-(global-set-key (kbd "C-c M-q") 'rc/unfill-paragraph)
+(global-set-key (kbd "C-c M-q") 'aoc/unfill-paragraph)
 
 (global-set-key (kbd "S-M-<backspace>") 'backward-mark-word)
 
@@ -565,23 +590,22 @@ This command does the inverse of `fill-paragraph'."
 
 (define-key dired-mode-map (kbd "r") #'wdired-change-to-wdired-mode)
 
-;; Removes all non-required packages
-(setq package-selected-packages rc/required-packages)
-(package-autoremove)
-
 (global-set-key (kbd "C-.") #'imenu-anywhere)
 (global-set-key (kbd "C-'") #'imenu-list-smart-toggle)
 
+;; Expand region
+(global-set-key (kbd "C-=") 'er/expand-region)
+
 ;; Multiple Cursors
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-(global-set-key (kbd "C->")         'mc/mark-next-like-this)
-(global-set-key (kbd "C-<")         'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c C-<")     'mc/mark-all-like-this)
-(global-set-key (kbd "C-\"")        'mc/skip-to-next-like-this)
-(global-set-key (kbd "C-:")         'mc/skip-to-previous-like-this)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(global-set-key (kbd "C-\"") 'mc/skip-to-next-like-this)
+(global-set-key (kbd "C-:") 'mc/skip-to-previous-like-this)
 
 (global-unset-key (kbd "C-/"))
-(global-set-key (kbd "C-/")   'undo-fu-only-undo)
+(global-set-key (kbd "C-/") 'undo-fu-only-undo)
 (global-set-key (kbd "C-S-/") 'undo-fu-only-redo)
 
 (global-set-key (kbd "C-x C-1") #'delete-other-windows)
@@ -589,14 +613,106 @@ This command does the inverse of `fill-paragraph'."
 (global-set-key (kbd "C-x C-3") #'split-window-right)
 (global-set-key (kbd "C-x C-0") #'delete-window)
 
+;; repeat
+(global-set-key (kbd "C-.") 'repeat)
+
 ;; Windows
 
-(global-set-key (kbd "M-H")  'windmove-left)
-(global-set-key (kbd "M-L")  'windmove-right)
-(global-set-key (kbd "M-K")  'windmove-up)
-(global-set-key (kbd "M-J")  'windmove-down)
+(global-set-key (kbd "M-H") 'windmove-left)
+(global-set-key (kbd "M-L") 'windmove-right)
+(global-set-key (kbd "M-K") 'windmove-up)
+(global-set-key (kbd "M-J") 'windmove-down)
+
+(require 'meow)
+(defun meow-setup ()
+  (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
+  (meow-motion-define-key
+   '("j" . meow-next)
+   '("k" . meow-prev)
+   '("<escape>" . ignore))
+  (meow-leader-define-key
+   ;; Use SPC (0-9) for digit arguments.
+   '("1" . meow-digit-argument)
+   '("2" . meow-digit-argument)
+   '("3" . meow-digit-argument)
+   '("4" . meow-digit-argument)
+   '("5" . meow-digit-argument)
+   '("6" . meow-digit-argument)
+   '("7" . meow-digit-argument)
+   '("8" . meow-digit-argument)
+   '("9" . meow-digit-argument)
+   '("0" . meow-digit-argument)
+   '("/" . meow-keypad-describe-key)
+   '("?" . meow-cheatsheet))
+  (meow-normal-define-key
+   '("0" . meow-expand-0)
+   '("9" . meow-expand-9)
+   '("8" . meow-expand-8)
+   '("7" . meow-expand-7)
+   '("6" . meow-expand-6)
+   '("5" . meow-expand-5)
+   '("4" . meow-expand-4)
+   '("3" . meow-expand-3)
+   '("2" . meow-expand-2)
+   '("1" . meow-expand-1)
+   '("-" . negative-argument)
+   '(";" . meow-reverse)
+   '("," . meow-inner-of-thing)
+   '("." . meow-bounds-of-thing)
+   '("[" . meow-beginning-of-thing)
+   '("]" . meow-end-of-thing)
+   '("a" . meow-append)
+   '("A" . meow-open-below)
+   '("b" . meow-back-word)
+   '("B" . meow-back-symbol)
+   '("c" . meow-change)
+   '("d" . meow-delete)
+   '("D" . meow-backward-delete)
+   '("e" . meow-next-word)
+   '("E" . meow-next-symbol)
+   '("f" . meow-find)
+   '("g" . meow-cancel-selection)
+   '("G" . meow-grab)
+   '("h" . meow-left)
+   '("H" . meow-left-expand)
+   '("i" . meow-insert)
+   '("I" . meow-open-above)
+   '("j" . meow-next)
+   '("J" . meow-next-expand)
+   '("k" . meow-prev)
+   '("K" . meow-prev-expand)
+   '("l" . meow-right)
+   '("L" . meow-right-expand)
+   '("m" . meow-join)
+   '("n" . meow-search)
+   '("o" . meow-block)
+   '("O" . meow-to-block)
+   '("p" . meow-yank)
+   '("q" . meow-quit)
+   '("Q" . meow-goto-line)
+   '("r" . meow-replace)
+   '("R" . meow-swap-grab)
+   '("s" . meow-kill)
+   '("t" . meow-till)
+   '("u" . meow-undo)
+   '("U" . meow-undo-in-selection)
+   '("v" . meow-visit)
+   '("w" . meow-mark-word)
+   '("W" . meow-mark-symbol)
+   '("x" . meow-line)
+   '("X" . meow-goto-line)
+   '("y" . meow-save)
+   '("Y" . meow-sync-grab)
+   '("z" . meow-pop-selection)
+   '("'" . repeat)
+   '("<escape>" . ignore)))
+(meow-setup)
+(meow-global-mode 1)
+
+;; Removes all non-required packages
+(setq package-selected-packages rc/required-packages)
+(package-autoremove)
 
 (setq custom-file "~/.emacs.d/custom.el")
-(when (file-exists-p custom-file)
-  (load-file custom-file))
+(when (file-exists-p custom-file) (load-file custom-file))
 ;; EOF
