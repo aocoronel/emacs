@@ -1,15 +1,101 @@
 ;; -*- lexical-binding: t; -*-
 
-;; Some useful configs from: https://github.com/jamescherti/minimal-emacs.d
-(load-file "~/.emacs.d/minimal-emacs.el")
-
 (add-to-list 'load-path "~/.emacs.d/local/")
 
 ;; emacs builtins
 (require 'compile)
 (require 'dired-x)
 
+(put 'downcase-region 'disabled nil)
+(add-hook 'emacs-startup-hook #'global-auto-revert-mode)
+
 (setq
+ undo-limit (* 13 160000)
+ undo-strong-limit (* 13 240000)
+ undo-outer-limit (* 13 24000000)
+ truncate-string-ellipsis "…"
+ eval-expression-print-length nil
+ eval-expression-print-level nil
+ x-underline-at-descent-line t
+ create-lockfiles nil
+ make-backup-files t
+ backup-directory-alist
+ `(("." . ,(expand-file-name "backup" user-emacs-directory)))
+ tramp-backup-directory-alist backup-directory-alist
+ backup-by-copying-when-linked t
+ backup-by-copying t
+ delete-old-versions t
+ version-control t
+ kept-new-versions 5
+ kept-old-versions 5
+ auto-save-include-big-deletions t
+
+ auto-save-list-file-prefix
+       (expand-file-name "autosave/" user-emacs-directory)
+ tramp-auto-save-directory
+       (expand-file-name "tramp-autosave/" user-emacs-directory)
+
+ auto-save-no-message t
+ auto-save-default t
+ auto-save-interval 300
+ auto-save-timeout 30
+
+ vc-git-print-log-follow t
+ vc-make-backup-files nil
+ vc-git-diff-switches '("--histogram")
+
+ kept-old-versions 10
+ kept-new-versions 10
+
+ kill-buffer-delete-auto-save-files t
+ kill-do-not-save-duplicates t
+
+ revert-without-query (list ".")
+ auto-revert-stop-on-user-input nil
+ auto-revert-verbose t
+
+ global-auto-revert-non-file-buffers t
+ global-auto-revert-ignore-modes '(Buffer-menu-mode)
+
+ auto-revert-interval 3
+ auto-revert-remote-files nil
+ auto-revert-use-notify t
+ auto-revert-avoid-polling nil
+ auto-revert-verbose t
+
+ save-place-file (expand-file-name "saveplace" user-emacs-directory)
+ save-place-limit 600
+ history-length 300
+ savehist-save-minibuffer-history t
+ savehist-additional-variables
+       '(kill-ring                        ; clipboard
+         register-alist                   ; macros
+         mark-ring global-mark-ring       ; marks
+         search-ring regexp-search-ring) ; searches
+
+ window-resize-pixelwise nil
+
+ window-divider-default-bottom-width 1
+       window-divider-default-places t
+       window-divider-default-right-width 1
+
+ redisplay-skip-fontification-on-input t
+
+ fast-but-imprecise-scrolling t
+
+ auto-window-vscroll nil
+
+ cursor-in-non-selected-windows nil
+ highlight-nonselected-windows nil
+
+ global-text-scale-adjust-resizes-frames nil
+
+ comment-multi-line t
+ comment-empty-lines t
+
+ sentence-end-double-space nil
+ lazy-highlight-initial-delay 0
+
  ;; recentf
  recentf-max-saved-items 300 ; default is 20
  recentf-max-menu-items 15
