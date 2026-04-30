@@ -799,6 +799,12 @@ This command does the inverse of `fill-paragraph'."
 (setq package-selected-packages rc/required-packages)
 (package-autoremove)
 
+(when (eq system-type 'androd)
+  (tool-bar-mode 0)
+  (menu-bar-mode 0)
+  (scroll-bar-mode 0)
+  (column-number-mode 1))
+
 (setq custom-file "~/.emacs.d/custom.el")
 (when (file-exists-p custom-file) (load-file custom-file))
 ;; EOF
