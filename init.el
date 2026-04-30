@@ -730,6 +730,8 @@ This command does the inverse of `fill-paragraph'."
    '("/" . meow-keypad-describe-key)
    '("?" . meow-cheatsheet))
   (meow-normal-define-key
+   '("C-u" . scroll-down-command)
+   '("C-d" . scroll-up-command)
    '("0" . meow-expand-0)
    '("9" . meow-expand-9)
    '("8" . meow-expand-8)
