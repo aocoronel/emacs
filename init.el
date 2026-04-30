@@ -127,8 +127,7 @@
  isearch-wrap-pause 'no
  search-whitespace-regexp ".*?"
  isearch-lazy-count t
- lazy-count-prefix-format
- "(%s/%s "
+ lazy-count-prefix-format "%s/%s "
  lazy-count-suffix-format nil
 
  vc-follow-symlinks t
