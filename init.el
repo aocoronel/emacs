@@ -267,6 +267,14 @@
 
 ;; === Custom Functions ===
 
+(defun my/scroll-down ()
+  (interactive)
+  (next-line 20))
+
+(defun my/scroll-up ()
+  (interactive)
+  (previous-line 20))
+
 (defun kill-all-other-buffers ()
   "Kill all buffers except the current one."
   (interactive)
@@ -408,7 +416,6 @@ This command does the inverse of `fill-paragraph'."
 
 (fido-mode 1)
 (fido-vertical-mode 1)
-(setq ido-enable-flex-matching t)
 
 ;; === Visual Replace ===
 
@@ -574,27 +581,16 @@ This command does the inverse of `fill-paragraph'."
  icomplete-compute-delay 0.01
  completion-pcm-leading-wildcard t)
 
-(setq completion-styles
-      '(basic orderless)
+(setq completion-styles '(orderless)
       completion-category-defaults nil
       completion-category-overrides
-      '((file (styles partial-completion))))
+      '((command (styles orderless))))
 
 ;; === Zoxide ===
 
 (rc/require 'zoxide)
 (setq zoxide-use-cache t)
 (setq zoxide-completion-function #'completing-read)
-
-(defun aoc/zoxide-find-file ()
-  "Jump to a zoxide directory and open dired."
-  (interactive)
-  (dired (zoxide-find-file)))
-
-(defun aoc/zoxide-cd ()
-  "Jump to a zoxide directory."
-  (interactive)
-  (cd (zoxide-find-file)))
 
 ;; === Undo Fu ===
 
@@ -634,6 +630,9 @@ This command does the inverse of `fill-paragraph'."
 (global-set-key (kbd "C-x C-g") 'find-file-at-point)
 (global-set-key (kbd "C-c i m") 'imenu)
 (global-set-key (kbd "H-f") 'find-file-at-point)
+
+(global-set-key (kbd "C-v") 'my/scroll-down)
+(global-set-key (kbd "M-v") 'my/scroll-up)
 
 (global-set-key (kbd "C-c m s") 'magit-status)
 (global-set-key (kbd "C-c m l") 'magit-log)
@@ -730,8 +729,8 @@ This command does the inverse of `fill-paragraph'."
    '("/" . meow-keypad-describe-key)
    '("?" . meow-cheatsheet))
   (meow-normal-define-key
-   '("C-u" . scroll-down-command)
-   '("C-d" . scroll-up-command)
+   '("C-u" . my/scroll-up)
+   '("C-d" . my/scroll-down)
    '("0" . meow-expand-0)
    '("9" . meow-expand-9)
    '("8" . meow-expand-8)
