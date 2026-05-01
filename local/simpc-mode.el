@@ -23,6 +23,8 @@
 
 (require 'subr-x)
 
+(defvar simpc-mode-hook nil "Hook for Simple C")
+
 (defvar simpc-mode-syntax-table
   (let ((table (make-syntax-table)))
     ;; C/C++ style comments
@@ -146,5 +148,7 @@
   (setq-local font-lock-defaults '(simpc-font-lock-keywords))
   (setq-local indent-line-function 'simpc-indent-line)
   (setq-local comment-start "// "))
+
+(run-hooks 'simpc-mode-hook)
 
 (provide 'simpc-mode)
