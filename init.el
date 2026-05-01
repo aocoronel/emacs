@@ -424,7 +424,7 @@ This command does the inverse of `fill-paragraph'."
 
 ;; === Eglot ===
 
-(rc/require 'eglot)
+(require 'eglot)
 (setq eglot-autoshutdown t
       eglot-send-changes-idle-time 0.5
       eglot-sync-connect 0
@@ -435,7 +435,11 @@ This command does the inverse of `fill-paragraph'."
       jsonrpc-event-hook nil
       eglot-events-buffer-config '(:size 0 :format short))
 
-(add-hook 'c-mode-hook #'eglot-ensure)
+(add-hook 'simpc-mode-hook #'eglot-ensure)
+
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+	       '(simpc-mode . ("clangd"))))
 
 (setq eglot-ignored-server-capabilities
       '(;; :hoverProvider
@@ -466,7 +470,7 @@ This command does the inverse of `fill-paragraph'."
 (rc/require 'ggtags)
 (add-hook 'c-mode-common-hook
           (lambda ()
-            (when (derived-mode-p 'csharp-mode 'c-mode 'c++-mode 'java-mode)
+            (when (derived-mode-p 'simpc-mode 'c-mode 'c++-mode 'java-mode)
               (ggtags-mode 1))))
 
 ;; === Buffer Terminator ===
@@ -494,19 +498,13 @@ This command does the inverse of `fill-paragraph'."
                 (awk-mode . "awk")
                 (other . "bsd")))
 
-(add-hook 'c-mode-hook
-	  (lambda () (interactive) (c-toggle-comment-style -1)))
-
-;; (require 'simpc-mode)
-;; (add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
-;; (add-to-list 'auto-mode-alist '("\\.[b]\\'" . simpc-mode))
-;; (add-hook 'simpc-mode-hook
-;;           (lambda ()
-;;             (interactive)
-;;             (setq-local fill-paragraph-function 'astyle-buffer)))
-
-(add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . csharp-mode))
-(add-to-list 'auto-mode-alist '("\\.[b]\\'" . csharp-mode))
+(require 'simpc-mode)
+(add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
+(add-to-list 'auto-mode-alist '("\\.[b]\\'" . simpc-mode))
+(add-hook 'simpc-mode-hook
+          (lambda ()
+            (interactive)
+            (setq-local fill-paragraph-function 'astyle-buffer)))
 
 ;; markdown
 
@@ -522,7 +520,7 @@ This command does the inverse of `fill-paragraph'."
 
 (reformatter-define c-format :program "clang-format" :group 'c)
 
-(add-hook 'csharp-mode-hook
+(add-hook 'simpc-mode-hook
           (lambda () (c-format-on-save-mode)))
 
 (add-hook 'c-mode-hook
