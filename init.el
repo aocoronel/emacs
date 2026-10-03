@@ -768,6 +768,8 @@ This command does the inverse of `fill-paragraph'."
  'orderless
  'rainbow-mode
  'reformatter
+ 'ox-rss
+ 'htmlize
  'undo-fu
  'vertico)
 
@@ -798,6 +800,10 @@ This command does the inverse of `fill-paragraph'."
  corfu-auto-prefix 2)
 
 (with-eval-after-load 'corfu (define-key corfu-map (kbd "RET") #'newline))
+
+(add-hook 'minibuffer-setup-hook
+          (lambda ()
+            (setq-local corfu-auto nil)))
 
 (setq
  orderless-matching-styles '(orderless-literal orderless-flex)
