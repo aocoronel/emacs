@@ -2,11 +2,11 @@
 
 This configuration fits in less than 1000 lines of Emacs Lisp, including comments and whitespaces.
 
-It has performance and simplicity in mind, using most of Emacs builtin features. The configuration started as a template from [rexim](https://github.com/rexim/dotfiles) dotfiles, and inspired by [minimal-emacs.d](https://github.com/jamescherti/minimal-emacs.d), [prot](https://github.com/protesilaos/dotfiles) and [emacs-solo](https://github.com/LionyxML/emacs-solo).
+It has performance and simplicity in mind, using most of Emacs builtin features. The configuration started as a template from [[https://github.com/rexim/dotfiles][rexim]] dotfiles, and inspired by [[https://github.com/jamescherti/minimal-emacs.d][minimal-emacs.d]], [[https://github.com/protesilaos/dotfiles][prot]] and [[https://github.com/LionyxML/emacs-solo][emacs-solo]].
 
-![Footage](./img.avif)
+[[file:./img.avif][Footage]]
 
-## License
+** License
 
 This repository is licensed under the GPL-3 license. Otherwise stated.
 
