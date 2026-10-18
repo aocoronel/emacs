@@ -4,7 +4,7 @@ This configuration fits in less than 1000 lines of Emacs Lisp, including comment
 
 It has performance and simplicity in mind, using most of Emacs builtin features. The configuration started as a template from [[https://github.com/rexim/dotfiles][rexim]] dotfiles, and inspired by [[https://github.com/jamescherti/minimal-emacs.d][minimal-emacs.d]], [[https://github.com/protesilaos/dotfiles][prot]] and [[https://github.com/LionyxML/emacs-solo][emacs-solo]].
 
-[[file:./img.avif][Footage]]
+#+HTML: <img src="./img.avif"/>
 
 ** License
 
