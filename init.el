@@ -20,7 +20,7 @@
 (require 'dired-x)
 (require 'phi-search)
 (require 'hide-comnt)
-(require 'zoxide)
+(require 'tp)
 (require 'treesit)
 (require 'subr-x)
 
@@ -816,15 +816,11 @@ This command does the inverse of `fill-paragraph'."
  completion-category-defaults nil
  completion-category-overrides '((file (styles partial-completion))))
 
-(setq
- zoxide-use-cache t
- zoxide-completion-function #'completing-read)
-
-(defun rc/zoxide-add-current-directory ()
+(defun rc/tp-add-current-directory ()
   (when-let ((dir default-directory))
-    (zoxide-add dir)))
+    (tp-add dir)))
 
-(add-hook 'dired-mode-hook #'rc/zoxide-add-current-directory)
+(add-hook 'dired-mode-hook #'rc/tp-add-current-directory)
 
 ;; === Non essential packages are configured with use-package instead ===
 
@@ -1019,8 +1015,8 @@ This command does the inverse of `fill-paragraph'."
  '("C-x C-2"             . split-window-below)
  '("C-x C-3"             . split-window-right)
  '("C-x C-0"             . delete-window)
- '("M-z f"               . zoxide-find-file)
- '("M-z c"               . zoxide-travel)
+ '("M-z f"               . tp-find-file)
+ '("M-z c"               . tp-cd)
  '("C-c s"               . surround-with-next-char)
  '("C-M-k"               . kill-whole-line)
  '("C-."                 . imenu-anywhere)
