@@ -907,7 +907,7 @@ This command does the inverse of `fill-paragraph'."
 (use-package mu4e
   :commands (mu4e compose-mail)
   :config
-  (load-file "~/stow/mu4e/mu4e-config.el"))
+  (load-file "~/.emacs.d/mu4e-config.el"))
 
 (use-package org
   :config
