@@ -761,7 +761,6 @@ This command does the inverse of `fill-paragraph'."
  'elfeed
  'embark
  'expreg
- 'magit
  'ledger-mode
  'move-text
  'multiple-cursors
